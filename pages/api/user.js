@@ -1,11 +1,11 @@
-import { http } from './http';
+import { api } from '../services/api.services';
 
 export default async function handler(req, res) {
 	try {
-		const { data } = await http.get('/api/user');
+		const { data } = await api.get('http://localhost:8013/api/user');
 		const { user } = data;
-		res.status(200).json(user);
-	} catch (e) {
-		console.error('error', e);
+		res.send(user);
+	} catch ({ response: { status, data } }) {
+		res.status(status).json(data)
 	}
 }
