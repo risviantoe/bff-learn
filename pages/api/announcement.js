@@ -1,4 +1,4 @@
-import { api } from '../services/api.services';
+import { api } from '../../services/api.services';
 
 export default async function handler(req, res) {
     try {

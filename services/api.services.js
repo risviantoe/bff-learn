@@ -13,19 +13,19 @@ export const api = axios.create({
 	withCredentials: true,
 });
 
-createAuthRefreshInterceptor(api, failedRequest => 
-    api.get('/api/auth/refresh').then(res => {
-        if (api.defaults.headers.setCookie) {
-            delete api.defaults.headers.setCookie
+createAuthRefreshInterceptor(bff, failedRequest => 
+    bff.post('/api/refresh').then(res => {
+        if (bff.defaults.headers.setCookie) {
+            delete bff.defaults.headers.setCookie
         }
 
         const {access_token} = res.data
         const bearer = `Bearer ${access_token}`
-        api.defaults.headers.Authorization = bearer
+        bff.defaults.headers.Authorization = bearer
 
         const responseCookie = setCookie.parse(res.headers['set-cookie'])[0]
-        api.defaults.headers.setCookie = res.headers['set-cookie']
-        api.defaults.headers.cookie = cookie.serialize(
+        bff.defaults.headers.setCookie = res.headers['set-cookie']
+        bff.defaults.headers.cookie = cookie.serialize(
             responseCookie.name,
             responseCookie.value
         )
