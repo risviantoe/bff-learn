@@ -1,21 +1,22 @@
 import { createSlice, SerializedError, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { bff } from '../../services/api.services';
 
 export const login = createAsyncThunk(
 	'auth/login',
 	async (credentials, thunkAPI) => {
 		try {
-			const response = await axios.post('api/login', credentials);
-			const refetch = await axios.get('api/user', {
+			const response = await bff.post('/api/login', credentials);
+			const refetch = await bff.get('/api/user', {
 				headers: {
-					Authorization: `Bearer ${response.data.access_token}`,
-				},
+					Authorization: `Bearer ${response.data.access_token}`
+				}
 			});
 			return {
 				accessToken: response.data.access_token,
 				user: { name: refetch.data.name },
 			};
 		} catch (error) {
-			return thunkAPI.rejectWithValue({ error: error.message });
+			// return thunkAPI.rejectWithValue({ error: error.message });
 		}
 	}
 );
@@ -38,13 +39,14 @@ export const authSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(login.fulfilled, (state, action) => {
-			state.accessToken = action.payload.access_token;
-			state.user = action.payload.user;
+			console.log(action?.payload);
+			state.accessToken = action.payload?.access_token;
+			state.user = action.payload?.user;
 			state.loading = 'idle';
 		});
 		builder.addCase(login.rejected, (state, action) => {
 			state = { ...initState, error: action.error };
-			throw new Error(action.error.message);
+			// throw new Error(action.error.message);
 		});
 	}
 });
