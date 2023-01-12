@@ -19,7 +19,7 @@ const rootReducer = (state, action) => {
 
 export const store = configureStore({
 	reducer: {
-		auth: authSlice.reducer
+		auth: authSlice.reducer,
 	},
 });
 

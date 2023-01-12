@@ -21,11 +21,11 @@ createAuthRefreshInterceptor(bff, failedRequest =>
 
         const {access_token} = res.data
         const bearer = `Bearer ${access_token}`
-        bff.defaults.headers.Authorization = bearer
+        api.defaults.headers.Authorization = bearer
 
         const responseCookie = setCookie.parse(res.headers['set-cookie'])[0]
-        bff.defaults.headers.setCookie = res.headers['set-cookie']
-        bff.defaults.headers.cookie = cookie.serialize(
+        api.defaults.headers.setCookie = res.headers['set-cookie']
+        api.defaults.headers.cookie = cookie.serialize(
             responseCookie.name,
             responseCookie.value
         )

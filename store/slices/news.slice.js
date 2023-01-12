@@ -1,16 +1,12 @@
-import {
-	createSlice,
-	createAsyncThunk,
-} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api, bff } from '../../services/api.services';
 
-export const login = createAsyncThunk(
-	'auth/login',
-	async (credentials) => {
-		const { data } = await bff.post('/api/login', credentials);
-		return data;
-	}
-);
+let token = '';
+export const news = createAsyncThunk('news', async (credentials) => {
+	const { data } = await bff.get('/api/news');
+
+	return data;
+});
 
 const initState = {
 	accessToken: {},
@@ -20,7 +16,7 @@ const initState = {
 };
 
 export const authSlice = createSlice({
-	name: 'auth',
+	name: 'news',
 	initialState: initState,
 	reducers: {
 		updateAccessToken(state, action) {
@@ -30,12 +26,12 @@ export const authSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(login.fulfilled, (state, {payload}) => {
+			.addCase(news.fulfilled, (state, { payload }) => {
 				state.accessToken = `Bearer ${payload.access_token}`;
 				state.user = payload?.user;
 				state.loading = 'idle';
 			})
-			.addCase(login.rejected, (state, {error}) => {
+			.addCase(news.rejected, (state, { error }) => {
 				state = { ...initState, error: error };
 				throw new Error(error.message);
 			});

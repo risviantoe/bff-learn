@@ -2,10 +2,9 @@ import { api } from '../../services/api.services';
 
 export default async function handler(req, res) {
 	try {
-		const { data } = await api.get('http://localhost:8013/api/user');
-		const { user } = data;
-		res.send(user);
+		const { data } = await api.get('/api/user');
+		res.send(data);
 	} catch ({ response: { status, data } }) {
-		res.status(status).json(data)
+		res.status(status).json(data);
 	}
 }
